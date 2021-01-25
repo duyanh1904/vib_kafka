@@ -1,5 +1,6 @@
 from kafka import KafkaConsumer
 from json import loads
+from src.model.base_model import CustProfile
 
 
 class ConsumerKafka:
@@ -14,7 +15,8 @@ class ConsumerKafka:
     for message in consumer:
         # message value and key are raw bytes -- decode if necessary!
         # e.g., for unicode: `message.value.decode('utf-8')`
-        print("%s:%d:%d: key=%s value=%s" % (message.topic, message.partition,
-                                             message.offset, message.key,
-                                             message.value))
+        for record_per_page in CustProfile.select().order_by(CustProfile.cust_id).paginate(message.value, 500):
+            print(message.value)
+            print(record_per_page.cust_name)
+
 

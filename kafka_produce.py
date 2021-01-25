@@ -7,6 +7,6 @@ producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
                          dumps(x).encode('utf-8'))
 
 
-for page in range(Pagination.page):
+for page in range(1, Pagination.page + 1):
     producer.send('vib', page)
 

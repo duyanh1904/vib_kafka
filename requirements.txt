@@ -1,4 +1,4 @@
 kafka-python
-Flask
-peewee
+Flask~=1.1.2
+peewee~=3.14.0
 pymysql
