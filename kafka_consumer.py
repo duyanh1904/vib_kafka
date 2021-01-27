@@ -1,22 +1,28 @@
 from kafka import KafkaConsumer
 from json import loads
 from src.model.base_model import CustProfile
+from kafka_produce import Producer
 
 
 class ConsumerKafka:
-    consumer = KafkaConsumer(
-        'vib',
-        bootstrap_servers=['localhost:9092'],
-        auto_offset_reset='earliest',
-        enable_auto_commit=True,
-        group_id='my-group',
-        value_deserializer=lambda x: loads(x.decode('utf-8')))
+    consumer = KafkaConsumer('vib_topic', bootstrap_servers=['localhost:9092'],
+                             group_id='vib-kafka',
+                             value_deserializer=lambda x: loads(x.decode('utf-8')))
+
+    consumer1 = KafkaConsumer('vib_record', group_id='vib-group',
+                              bootstrap_servers=['localhost:9092'],
+                              value_deserializer=lambda x: loads(x.decode('utf-8')))
 
     for message in consumer:
-        # message value and key are raw bytes -- decode if necessary!
-        # e.g., for unicode: `message.value.decode('utf-8')`
         for record_per_page in CustProfile.select().order_by(CustProfile.cust_id).paginate(message.value, 500):
-            print(message.value)
-            print(record_per_page.cust_name)
+            Producer.producer_send_msg_records(record_per_page.cust_name)
+            print(message.value, message.partition, message.offset, message.topic, message.key)
+            print(record_per_page.cust_name, record_per_page.cust_card)
+
+
+
+
+
+
 
 

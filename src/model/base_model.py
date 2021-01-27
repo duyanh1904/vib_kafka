@@ -14,14 +14,15 @@ class CustProfile(BaseModel):
     class Meta:
         table_name = 'cust_profile'
 
+
 db.create_tables([CustProfile])
 
-#
+
 # i = 1
 #
-# while i < 10000:
-#     CustProfile.create(cust_name = 'bayner', cust_card = 'visa')
+# while i < 1000000:
+#     CustProfile.create(cust_name = 'kafka_test', cust_card = 'debit_visa')
 #     i += 1
-
+#
 # print(CustProfile.select().count())
 
